@@ -1,0 +1,84 @@
+frameworkVersion: ">=1.28.0 <2.0.0"
+
+plugins:
+  - serverless-step-functions
+  - serverless-pseudo-parameters
+
+service: circleci-feedback
+provider:
+  name: aws
+  runtime: go1.x
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'kms:Decrypt'
+      Resource:
+        - "${env:KMS_KEY_ARN}"
+    - Effect: 'Allow'
+      Action:
+        - 'ssm:GetParameter'
+      Resource:
+        - "arn:aws:ssm:#{AWS::Region}:#{AWS::AccountId}:parameter/circleci-feedback/*"
+    - Effect: 'Allow'
+      Action:
+        - 'states:StartExecution'
+      Resource:
+        - "arn:aws:states:#{AWS::Region}:#{AWS::AccountId}:stateMachine:circleci-feedback"
+
+package:
+ exclude:
+   - ./**
+ include:
+   - ./bin/**
+
+functions:
+  entry:
+    handler: bin/entry
+    environment:
+      STEP_FUNCTION_ARN: "arn:aws:states:#{AWS::Region}:#{AWS::AccountId}:stateMachine:circleci-feedback"
+    events:
+      - http:
+          path: entry
+          method: post
+  findPipelineID:
+    handler: bin/find_pipeline_id
+    environment:
+      CIRCLE_TOKEN: ${env:CIRCLE_TOKEN}
+  waitForJobs:
+    handler: bin/wait_for_jobs
+    environment:
+      CIRCLE_TOKEN: ${env:CIRCLE_TOKEN}
+
+stepFunctions:
+  stateMachines:
+    circleci-feedback:
+      name: circleci-feedback
+      definition:
+        Comment: "Step Function that Posts CircleCI Build Output on GitHub Pull Requests"
+        StartAt: findPipelineID
+        States:
+          findPipelineID:
+            Type: Task
+            Resource: 
+              Fn::GetAtt: [findPipelineID, Arn]
+            Next: waitForJobs
+          waitForJobs:
+            Type: Task
+            Resource: 
+              Fn::GetAtt: [waitForJobs, Arn]
+            Next: jobsDoneChoice
+          sleepForJobs:
+            Type: Wait
+            SecondsPath: "$.wait_for_jobs_wait_time"
+            Next: waitForJobs
+          jobsDoneChoice:
+            Type: Choice
+            Choices:
+            - Variable: "$.all_jobs_done"
+              BooleanEquals: true
+              Next: done
+            Default: sleepForJobs
+          done:
+            Type: Succeed
