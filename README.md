@@ -3,7 +3,7 @@
 A Github app that posts build logs from failed CircleCI jobs on toPull Requests as comments.
 
 
-<img src="docs/screenshot.png" alt="screenshot" height=60% width=60%>
+<img src="docs/screenshot.png" alt="screenshot" height=60% width=60% class="center">
 
 
 A Github app configured to receive pull request events and post comments on pull requests makes this happen.
