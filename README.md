@@ -2,9 +2,9 @@
 
 A Github app that posts build logs from failed CircleCI jobs on toPull Requests as comments.
 
-
-<img src="docs/screenshot.png" alt="screenshot" height=60% width=60% class="center">
-
+<p align="center">
+<img src="docs/screenshot.png" alt="screenshot" height=60% width=60%>
+</p>
 
 A Github app configured to receive pull request events and post comments on pull requests makes this happen.
 For each pull request event, a webhook is sent to API Gateway, the request is authorized and ultimately an [AWS Step Function](https://aws.amazon.com/step-functions/) is started. The step function runs very simple logic with Lambda functions and uses step function features to run this as cheap as possible. 
