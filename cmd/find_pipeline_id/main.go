@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/codingdiaz/circleci-feedback/internal/stepfunc"
@@ -16,7 +15,15 @@ func main() {
 }
 
 func handler(ctx context.Context, in stepfunc.Data) (stepfunc.Data, error) {
-	client := circleci.Client{Token: os.Getenv("CIRCLE_TOKEN")}
+
+	// get configuration for lambda function to run
+	c, err := stepfunc.GetConfiguration()
+	if err != nil {
+		log.Printf("Error getting lambda function configuration, error: %s", err)
+		return in, fmt.Errorf("Error getting lambda function configuration, error: %s", err)
+	}
+
+	client := circleci.Client{Token: c.CircleToken}
 	pipelines, err := client.GetProjectPipelines("gh", in.Owner, in.RepoName)
 	if err != nil {
 		log.Printf("Error getting pipelineIDs, error: %s", err)

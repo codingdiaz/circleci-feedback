@@ -44,12 +44,8 @@ functions:
           method: post
   findPipelineID:
     handler: bin/find_pipeline_id
-    environment:
-      CIRCLE_TOKEN: ${env:CIRCLE_TOKEN}
   waitForJobs:
     handler: bin/wait_for_jobs
-    environment:
-      CIRCLE_TOKEN: ${env:CIRCLE_TOKEN}
 
 stepFunctions:
   stateMachines:

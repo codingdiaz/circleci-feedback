@@ -6,7 +6,6 @@ import (
 	"log"
 	"math"
 	"net/url"
-	"os"
 
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/codingdiaz/circleci-feedback/internal/stepfunc"
@@ -21,12 +20,19 @@ func main() {
 
 func handler(ctx context.Context, in stepfunc.Data) (stepfunc.Data, error) {
 
+	// get configuration for lambda function to run
+	c, err := stepfunc.GetConfiguration()
+	if err != nil {
+		log.Printf("Error getting lambda function configuration, error: %s", err)
+		return in, fmt.Errorf("Error getting lambda function configuration, error: %s", err)
+	}
+
 	// handle backoff retry, update step function input to set as future outputs
 	in.WaitForJobsWaitTime = int(math.Pow(2, float64(in.WaitForJobsRetryCount)))
 	in.WaitForJobsRetryCount = in.WaitForJobsRetryCount + 1
 
 	// create v2 circleci client
-	client := circleci.Client{Token: os.Getenv("CIRCLE_TOKEN")}
+	client := circleci.Client{Token: c.CircleToken}
 
 	// if we don't have the workflow ids, get them
 	if len(in.WorkflowIDs) == 0 {
@@ -76,7 +82,7 @@ func handler(ctx context.Context, in stepfunc.Data) (stepfunc.Data, error) {
 		for _, job := range jobs {
 			if job.Status == "failed" {
 				log.Println("Sending failure logs to github as a comment on a pull request")
-				err := sendBuildFailureToGithub(in, job.JobNumber)
+				err := sendBuildFailureToGithub(in, job.JobNumber, c)
 				if err != nil {
 					return in, fmt.Errorf("Error sending build failure to github, %s", err)
 				}
@@ -89,15 +95,10 @@ func handler(ctx context.Context, in stepfunc.Data) (stepfunc.Data, error) {
 	return in, nil
 }
 
-func sendBuildFailureToGithub(in stepfunc.Data, number int) error {
-	cfg, err := stepfunc.GetConfiguration()
-	if err != nil {
-		log.Printf("Error getting configuration before sending build failure to github %s", err)
-		return err
-	}
+func sendBuildFailureToGithub(in stepfunc.Data, number int, cfg stepfunc.Config) error {
 
 	c := circleci.Client{
-		Token:   os.Getenv("CIRCLE_TOKEN"),
+		Token:   cfg.CircleToken,
 		BaseURL: &url.URL{Host: "circleci.com", Scheme: "https", Path: "/api/v1.1/"},
 	}
 
