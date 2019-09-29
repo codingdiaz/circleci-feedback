@@ -5,25 +5,25 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
   
-  <link rel="shortcut icon" href="img/favicon.ico">
-  <title>circleci-feedback - circleci-feeback</title>
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Architecture - circleci-feeback</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
-  <link rel="stylesheet" href="css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
   
   <script>
     // Current page data
-    var mkdocs_page_name = "circleci-feedback";
-    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_name = "Architecture";
+    var mkdocs_page_input_path = "architecture.md";
     var mkdocs_page_url = null;
   </script>
   
-  <script src="js/jquery-2.1.1.min.js" defer></script>
-  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
   <script>hljs.initHighlightingOnLoad();</script> 
   
@@ -36,9 +36,9 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href="." class="icon icon-home"> circleci-feeback</a>
+        <a href=".." class="icon icon-home"> circleci-feeback</a>
         <div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
@@ -50,12 +50,18 @@
           
             <li class="toctree-l1">
 		
-    <a class="" href="getting_started/">Getting Started</a>
+    <a class="" href="../getting_started/">Getting Started</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="architecture/">Architecture</a>
+    <a class="current" href="./">Architecture</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#architecture">Architecture</a></li>
+    
+
+    </ul>
 	    </li>
           
         </ul>
@@ -68,7 +74,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href=".">circleci-feeback</a>
+        <a href="..">circleci-feeback</a>
       </nav>
 
       
@@ -76,11 +82,11 @@
         <div class="rst-content">
           <div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
-    <li><a href=".">Docs</a> &raquo;</li>
+    <li><a href="..">Docs</a> &raquo;</li>
     
       
     
-    <li>circleci-feedback</li>
+    <li>Architecture</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -90,21 +96,20 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="circleci-feedback">circleci-feedback</h1>
-<p>A Github app that posts build logs from failed CircleCI jobs to Pull Requests.</p>
-<p align="center">
-<img src="images/screenshot.png" alt="screenshot" height=60% width=60%>
-</p>
-
-<h2 id="overview">Overview</h2>
-<p>CircleCI Feedback is a Github app that posts <a href="https://circleci.com/">CircleCI</a> build logs back to your pull requests. This Github app aims to keep you in Github as much as possible so you can iterate on your favorite project faster.</p>
-<p>Ready to use it? Checkout the <a href="getting_started/">getting started guide</a>.</p>
-<h2 id="architecture">Architecture</h2>
-<p>For each pull request event, a webhook is sent to API Gateway, the request is authorized and ultimately an <a href="https://aws.amazon.com/step-functions/">AWS Step Function</a> is started. The step function runs very simple logic with Lambda functions and uses step function features to run this as cheap as possible. </p>
+                <h1 id="architecture">Architecture</h1>
+<p><img src="../images/diagram.png" alt="screenshot" height=60% width=60%></p>
+<p><img src="../images/step_func.png" alt="screenshot" height=60% width=60%></p>
               
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../getting_started/" class="btn btn-neutral" title="Getting Started"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -128,17 +133,14 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
+        <span><a href="../getting_started/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
       
     </span>
 </div>
-    <script>var base_url = '.';</script>
-    <script src="js/theme.js" defer></script>
-      <script src="search/main.js" defer></script>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-09-29 15:28:49
--->
