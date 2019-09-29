@@ -4,3 +4,4 @@ theme:
   name: 'readthedocs'
 nav:
     - 'Getting Started': 'getting_started.md'
+    - 'Architecture': 'architecture.md'
