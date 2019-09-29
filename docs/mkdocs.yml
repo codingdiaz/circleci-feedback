@@ -1,0 +1,6 @@
+site_name: circleci-feeback
+docs_dir: docs
+theme:
+  name: 'readthedocs'
+nav:
+    - 'Getting Started': 'getting_started.md'

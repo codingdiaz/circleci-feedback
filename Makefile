@@ -11,3 +11,6 @@ deploy: clean build
 
 fmt:
 	go fmt ./pkg... ./internal... ./cmd...
+
+deploy-docs:
+	cd docs && mkdocs gh-deploy

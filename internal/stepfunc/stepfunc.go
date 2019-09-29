@@ -8,20 +8,22 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/codingdiaz/circleci-feedback/pkg/circleci"
 )
 
 // Data is the common input/ouput for all lambda functions in the step function
 type Data struct {
-	RepoName              string   `json:"repo_name"`
-	Owner                 string   `json:"owner"`
-	PullRequestNumber     int      `json:"pull_request_number"`
-	InstallationID        int      `json:"installation_id"`
-	CommitSHA             string   `json:"commit_sha"`
-	PipelineID            string   `json:"pipeline_id"`
-	WorkflowIDs           []string `json:"workflow_ids"`
-	AllJobsDone           bool     `json:"all_jobs_done"`
-	WaitForJobsRetryCount int      `json:"wait_for_jobs_retry_count"`
-	WaitForJobsWaitTime   int      `json:"wait_for_jobs_wait_time"`
+	RepoName              string                    `json:"repo_name"`
+	Owner                 string                    `json:"owner"`
+	PullRequestNumber     int                       `json:"pull_request_number"`
+	InstallationID        int                       `json:"installation_id"`
+	CommitSHA             string                    `json:"commit_sha"`
+	PipelineID            string                    `json:"pipeline_id"`
+	WorkflowIDs           []string                  `json:"workflow_ids"`
+	WorkflowJobs          map[string][]circleci.Job `json:"workflow_jobs"`
+	AllJobsDone           bool                      `json:"all_jobs_done"`
+	WaitForJobsRetryCount int                       `json:"wait_for_jobs_retry_count"`
+	WaitForJobsWaitTime   int                       `json:"wait_for_jobs_wait_time"`
 }
 
 // Config holds all the configuration for the lambda function
