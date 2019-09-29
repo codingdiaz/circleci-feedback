@@ -21,16 +21,14 @@ func main() {
 
 func handler(ctx context.Context, in stepfunc.Data) (stepfunc.Data, error) {
 
-	// handle backoff retry
+	// handle backoff retry, update step function input to set as future outputs
 	in.WaitForJobsWaitTime = int(math.Pow(2, float64(in.WaitForJobsRetryCount)))
-	fmt.Println(in.WaitForJobsWaitTime)
 	in.WaitForJobsRetryCount = in.WaitForJobsRetryCount + 1
-	fmt.Println(in.WaitForJobsRetryCount)
 
+	// create v2 circleci client
 	client := circleci.Client{Token: os.Getenv("CIRCLE_TOKEN")}
 
 	// if we don't have the workflow ids, get them
-	fmt.Println(len(in.WorkflowIDs))
 	if len(in.WorkflowIDs) == 0 {
 		// get the full pipeline
 		pipeline, err := client.GetPipeline(in.PipelineID)
@@ -46,13 +44,19 @@ func handler(ctx context.Context, in stepfunc.Data) (stepfunc.Data, error) {
 		in.WorkflowIDs = workflows
 	}
 
-	// if we do have the workflow ids, start looking up the jobs and statuses
+	// if we do have the workflow ids, start checking job information / status
 	for _, workflow := range in.WorkflowIDs {
 		jobs, err := client.GetWorkflowJobs(workflow)
 		if err != nil {
 			log.Printf("Error getting jobs for workflow with id %v, error: %s", workflow, err)
 			return in, fmt.Errorf("Error getting jobs for workflow with id %v, error: %s", workflow, err)
 		}
+
+		if in.WorkflowJobs == nil {
+			in.WorkflowJobs = make(map[string][]circleci.Job)
+		}
+
+		in.WorkflowJobs[workflow] = jobs
 
 		for _, job := range jobs {
 			if job.Status != "success" && job.Status != "failed" {
