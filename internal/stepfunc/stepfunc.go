@@ -31,6 +31,7 @@ type Config struct {
 	GitHubWebhookSecret string
 	GithubAppPrivateKey []byte
 	InstallationID      int
+	CircleToken         string
 }
 
 // GetConfiguration gets all the secret values that the lambda function needs to run and will error if it can't fetch any
@@ -79,6 +80,17 @@ func GetConfiguration() (Config, error) {
 	}
 
 	config.InstallationID = InstallationID
+
+	keyname = "/circleci-feedback/CircleToken"
+	param, err = ssmsvc.GetParameter(&ssm.GetParameterInput{
+		Name:           &keyname,
+		WithDecryption: &withDecryption,
+	})
+	if err != nil {
+		return config, fmt.Errorf("Error getting InstallationID, error: %s", err)
+	}
+
+	config.CircleToken = *param.Parameter.Value
 
 	return config, nil
 
