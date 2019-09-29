@@ -3,7 +3,7 @@
 A Github app that posts build logs from failed CircleCI jobs to Pull Requests.
 
 <p align="center">
-<img src="screenshot.png" alt="screenshot" height=60% width=60%>
+<img src="images/screenshot.png" alt="screenshot" height=60% width=60%>
 </p>
 
 ## Overview
