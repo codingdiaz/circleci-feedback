@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Getting Started - circleci-feeback</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Getting Started";
+    var mkdocs_page_input_path = "getting_started.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> circleci-feeback</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Getting Started</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#getting-started">Getting Started</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#prerequisites">Prerequisites</a></li>
+        
+            <li><a class="toctree-l3" href="#create-circleci-token">Create CircleCI Token</a></li>
+        
+            <li><a class="toctree-l3" href="#get-a-kms-key-arn">Get a KMS Key ARN</a></li>
+        
+            <li><a class="toctree-l3" href="#deploying-the-api">Deploying the API</a></li>
+        
+            <li><a class="toctree-l3" href="#create-a-github-app">Create a Github App</a></li>
+        
+            <li><a class="toctree-l3" href="#add-secrets-to-parameter-store">Add Secrets to Parameter Store</a></li>
+        
+            <li><a class="toctree-l3" href="#test-your-endpoint-with-curl">Test Your Endpoint With Curl</a></li>
+        
+            <li><a class="toctree-l3" href="#have-fun">Have fun!</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">circleci-feeback</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Getting Started</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="getting-started">Getting Started</h1>
+<p>The following guide will walk you through installing circleci-feedback in your <a href="https://aws.amazon.com/">AWS</a> account and creating a <a href="https://developer.github.com/apps/">Github application</a>.</p>
+<p>This has been tested on a MacOS. If you are using Windows or linux this should still help, but some commands will not work.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><a href="https://aws.amazon.com/">AWS account</a></li>
+<li><a href="https://nodejs.org/en/">Nodejs</a></li>
+<li><a href="https://github.com/">Github Account</a></li>
+<li><a href="https://golang.org/">Golang</a></li>
+<li>A basic understanding of AWS</li>
+</ul>
+<h2 id="create-circleci-token">Create CircleCI Token</h2>
+<p>Because this app currently uses the v2 public preview API for CircleCI, a token is required. </p>
+<ol>
+<li>
+<p>Login to <a href="https://circleci.com">circleci</a></p>
+</li>
+<li>
+<p>Go to <a href="https://circleci.com/account">user settings</a></p>
+</li>
+<li>
+<p>Go to <a href="https://circleci.com/account/api">Personal API Tokens</a></p>
+</li>
+<li>
+<p>Create a token and save it for a subsequent step</p>
+</li>
+</ol>
+<p>It is importaint to note that this GitHub app will only work for the GitHub repos the user you create the API token for has read access to. If you are deploying this in a production envrionment you should create a GitHub account and only give it read access to your repositories. </p>
+<h2 id="get-a-kms-key-arn">Get a KMS Key ARN</h2>
+<p>The API you deploy is going to need authentication to a couple services with tokens and a private key. To keep these secure, the application uses <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html">AWS Parameter Store</a> to securely retrieve these values, only when needed. </p>
+<p>Before we deploy the API, we need to know what <a href="https://aws.amazon.com/kms/">AWS KMS</a> key we will use to encrypt/decrypt these sensitive values. (The serverless application needs to know this value at deploy time)</p>
+<p>To quickly deploy, you can use the default key Amazon provides in your account. </p>
+<p>With the AWS ClI installed look for the AWS Managed Key with the alias <code>alias/aws/ssm</code></p>
+<p><code>aws kms describe-key --key-id alias/aws/ssm | jq -r .KeyMetadata.Arn</code></p>
+<p>You can also find this information in the console.</p>
+<p>If you wish to use a different key, just use that ARN instead of the default ssm key ARN. </p>
+<p>Export the ARN as an environment variable:</p>
+<p><code>export KMS_KEY_ARN=&lt;arn of key&gt;</code> (this env variable is used by the serverless framework)</p>
+<h2 id="deploying-the-api">Deploying the API</h2>
+<p>Before we configure the Github app, lets deploy the infrastructure/code that will power the Github app. Currently this deploys with the <a href="https://serverless.com/">serverless framework</a>.</p>
+<ol>
+<li>Clone or fork this repo (totally up to you!)</li>
+</ol>
+<p><code>git clone https://github.com/codingdiaz/circleci-feedback.git</code></p>
+<p><code>cd circleci-feedback</code></p>
+<ol>
+<li>Install NPM Dependencies for serverless (make sure you have node.js installed)</li>
+</ol>
+<p><code>npm install</code></p>
+<ol>
+<li>
+<p>Configure <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html">AWS credentials</a></p>
+<ul>
+<li>For now the best way to deploy this is with Administrator access to your AWS account, a least priviledge IAM policy document is in the works!</li>
+</ul>
+</li>
+<li>
+<p>Build and Deploy the application</p>
+</li>
+</ol>
+<p><code>make deploy</code></p>
+<p>This will complile the lambda function code and run a serverless deploy command. You need go installed to run this command.</p>
+<ol>
+<li>On a successfull deployment, save the POST URL serverless created and continue on.</li>
+</ol>
+<p><code>https://&lt;api-id&gt;.execute-api.us-east-1.amazonaws.com/dev/entry</code></p>
+<h2 id="create-a-github-app">Create a Github App</h2>
+<ol>
+<li>
+<p>Navigate to https://github.com and login</p>
+</li>
+<li>
+<p>Settings &gt; Developer Settings &gt; New GitHub app</p>
+</li>
+<li>
+<p>Fill out New Github app page:</p>
+</li>
+<li>
+<p>Name: Name your App something meaningful to you, GitHub apps need to be unique in name across all apps.</p>
+</li>
+<li>Homepage URL: https://github.com/codingdiaz/circleci-feedback (or whatever you want)</li>
+<li>Webhook URL: Use the POST URL serverless provided from the previous step</li>
+<li>Webhook Secret: Generate a strong random password, put it here and save it, we will use it later</li>
+<li>Permissions:<ul>
+<li>Contents: Read-only (used to check if the repo/branch has a <code>.circleci/config.yml</code> file)</li>
+<li>Metadata: Read-only (required)</li>
+<li>Pull Requests: Read &amp; Write (used to add comments to pull requests with build output)</li>
+</ul>
+</li>
+<li>Subscribe to Events:<ul>
+<li>Pull Requests (the only events this triggers on)</li>
+</ul>
+</li>
+<li>Where can this GitHub App be installed?<ul>
+<li>Only on this account</li>
+</ul>
+</li>
+</ol>
+<p>Click <strong>Create GitHub App</strong></p>
+<ol>
+<li>
+<p>Generate a private Key for you application</p>
+</li>
+<li>
+<p>Install your app to your organization</p>
+</li>
+</ol>
+<h2 id="add-secrets-to-parameter-store">Add Secrets to Parameter Store</h2>
+<p>You now should have a GitHub App created, installed and sending Pull Request webhook events to API gateway. </p>
+<p>The last step is to provide your lambda functions the appropriate authentication to CircleCI and GitHub.</p>
+<p>Put the following values into AWS Parameter store as a secure string using the KMS key you used above.</p>
+<ul>
+<li><code>/circleci-feedback/GithubWebhookSecret</code> (the secret value you generated when you created your GitHub app)</li>
+<li><code>/circleci-feedback/GithubAppPrivateKey</code> (the contents of the private key file you downloaded when you created your GitHub App)</li>
+<li><code>/circleci-feedback/InstallationID</code> (the installationID of your GitHub app)<ul>
+<li>This can be found by going to your GitHub App (Your Profile Settings &gt; Developer Settings &gt; GitHub Apps &gt; The About Page on your GitHub App)</li>
+</ul>
+</li>
+<li><code>/circleci-feedback/CircleToken</code> (the CircleCI token you generated already)</li>
+</ul>
+<h2 id="test-your-endpoint-with-curl">Test Your Endpoint With Curl</h2>
+<p><code>curl -X POST https://&lt;api-id&gt;.execute-api.us-east-1.amazonaws.com/dev/entry</code></p>
+<p>You should get a 403 status code, this validates the lambda function is ensuring the request is coming from GitHub. </p>
+<p>If you get a 500 status code, something is misconfigured, likely the lambda function can not read and decrypt the sensitive information from AWS parameter store. Check the lamda function logs for the entry function in CloudWatch.</p>
+<h2 id="have-fun">Have fun!</h2>
+<p>At this point you should have a fully functional GitHub application. You can make a CircleCI job fail to validate it is working.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
